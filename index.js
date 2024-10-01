@@ -180,6 +180,9 @@ server.post('/create-payment-intent', async (req, res) => {
       currency: 'inr',
       automatic_payment_methods:{
         enabled: true,
+      },
+      metadata:{
+        orderId
       }
     });    
     res.send({ clientSecret: paymentIntent.client_secret });
