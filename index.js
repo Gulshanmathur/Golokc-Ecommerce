@@ -39,10 +39,9 @@ const opts = {
 };
 // CORS configuration
 const corsOptions = {
-  origin: process.env.origin, // Your React app's URL  
+  origin: 'http://localhost:8001', // Your React app's URL   process.env.origin
   credentials: true, // Allow credentials (cookies)
   exposedHeaders : ['X-Total-Count'],
-
 };
 
 server.use(cors(corsOptions))
@@ -81,7 +80,7 @@ server.post('/stripe-webhook', express.raw({type: 'application/json'}), (request
  
 //middleware
 // server.use('/', serveStatic(path.join(__dirname, '../Frontend/dist')));
-// server.use(express.static('dist'))
+server.use(express.static(path.resolve(__dirname,'dist')))
 server.use(session({
   secret: process.env.SESSION_SECRET_KEY,
   resave: false, // don't save session if unmodified
@@ -108,7 +107,7 @@ server.use('/auth',authRouter)
 server.use('/cart',cartRouter)
 server.use('/ordersnow',ordersRouter)  
 
-// server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html')));
+server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html')));
 //pasport strategies
 passport.use('local',new LocalStrategy(
   {usernameField: 'email'},
