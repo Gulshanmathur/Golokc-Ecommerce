@@ -6,6 +6,7 @@ const orderSchema  = new mongoose.Schema({
     totalItems:{type:Number},
     user : {type:mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     paymentMethod:{type:String, required:true},
+    paymentStatus : {type:String, default:'pending'},
     status: {type:String, default:"pending"},
     selectedAddress :{type:[mongoose.Schema.Types.Mixed],required:true}
 })

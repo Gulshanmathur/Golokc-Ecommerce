@@ -22,6 +22,7 @@ const User = require("./model/User");
 const dotenv = require('dotenv');
 dotenv.config()
 const { isAuth, sanitizeUser, cookieExtracter } = require("./services/common");
+const Order = require("./model/Order");
 
 //webhook
 const endpointSecret = process.env.ENDPOINT_SECRET;
@@ -50,7 +51,7 @@ server.use(cors(corsOptions))
 //   {}
 // ))
 
-server.post('/stripe-webhook', express.raw({type: 'application/json'}), (request, response) => {
+server.post('/stripe-webhook', express.raw({type: 'application/json'}), async (request, response) => {
   const sig = request.headers['stripe-signature'];
 
   let event;
@@ -66,7 +67,9 @@ server.post('/stripe-webhook', express.raw({type: 'application/json'}), (request
   switch (event.type) {
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
-      console.log({paymentIntentSucceeded})
+      const order =await Order.findbyId(paymentIntentSucceeded.metadata.orderId);
+      order.paymentStatus = 'received';
+      await order.save()
       // Then define and call a function to handle the event payment_intent.succeeded
       break;
     // ... handle other event types
