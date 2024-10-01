@@ -67,7 +67,9 @@ server.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
   switch (event.type) {
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
+      console.log({paymentIntentSucceeded});
       const order =await Order.findbyId(paymentIntentSucceeded.metadata.orderId);
+      console.log({order});
       order.paymentStatus = 'received';
       await order.save()
       // Then define and call a function to handle the event payment_intent.succeeded
@@ -111,7 +113,7 @@ server.use('/cart',cartRouter)
 server.use('/ordersnow',ordersRouter)  
 
 // server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html')));
-server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname,'dist', 'index.html')));
+server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname,'dist','index.html')));
 //pasport strategies
 passport.use('local',new LocalStrategy(
   {usernameField: 'email'},
