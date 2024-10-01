@@ -107,7 +107,8 @@ server.use('/auth',authRouter)
 server.use('/cart',cartRouter)
 server.use('/ordersnow',ordersRouter)  
 
-server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html')));
+// server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname, '..', 'Frontend', 'dist', 'index.html')));
+server.get('*', (req,res)=>res.sendFile(path.resolve(__dirname,'dist', 'index.html')));
 //pasport strategies
 passport.use('local',new LocalStrategy(
   {usernameField: 'email'},
